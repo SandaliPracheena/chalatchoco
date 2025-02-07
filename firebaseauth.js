@@ -38,47 +38,45 @@
         messageDiv.style.opacity=0;
     },5000);
  }
- const signUp=document.getElementById('submitSignUp');
- signUp.addEventListener('click', (event)=>{
-    event.preventDefault();
-    alert(5);
-    const email=document.getElementById('rEmail').value;
-    const password=document.getElementById('rPassword').value;
-    const firstName=document.getElementById('fName').value;
-    const lastName=document.getElementById('lName').value;
+const signUp = document.getElementById('submitSignUp');
+signUp.addEventListener('click', (event) => {
+  event.preventDefault();
+  const email = document.getElementById('rEmail').value;
+  const password = document.getElementById('rPassword').value;
+  const firstName = document.getElementById('fName').value;
+  const lastName = document.getElementById('lName').value;
 
-    const auth=getAuth();
-    const db=getFirestore();
+  const auth = getAuth();
+  const db = getFirestore();
 
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential)=>{
-        const user=userCredential.user;
-        const userData={
-            email: email,
-            firstName: firstName,
-            lastName:lastName
-        };
-        showMessage('Account Created Successfully', 'signUpMessage');
-        const docRef=doc(db, "users", user.uid);
-        setDoc(docRef,userData)
-        .then(()=>{
-            window.location.href='index.html';
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      const userData = {
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+      };
+      showMessage('Account Created Successfully', 'signUpMessage');
+      const docRef = doc(db, "users", user.uid);
+      setDoc(docRef, userData)
+        .then(() => {
+          window.location.href = 'index.html';
         })
-        .catch((error)=>{
-            console.error("error writing document", error);
-
+        .catch((error) => {
+          console.error("Error writing document", error);
         });
     })
-    .catch((error)=>{
-        const errorCode=error.code;
-        if(errorCode=='auth/email-already-in-use'){
-            showMessage('Email Address Already Exists !!!', 'signUpMessage');
-        }
-        else{
-            showMessage('unable to create User', 'signUpMessage');
-        }
-    })
- });
+    .catch((error) => {
+      const errorCode = error.code;
+      if (errorCode === 'auth/email-already-in-use') {
+        showMessage('Email Address Already Exists !!!', 'signUpMessage');
+      } else {
+        showMessage('Unable to create User', 'signUpMessage');
+      }
+    });
+});
+
 
  const signIn=document.getElementById('submitSignIn');
  signIn.addEventListener('click', (event)=>{
